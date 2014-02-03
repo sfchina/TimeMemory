@@ -1,0 +1,24 @@
+{
+  "name": "TimeMemory",
+  "version": "0.1.0",
+  "description": "TimeMemory",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "node.js",
+    "eclipse",
+    "nodeclipse"
+  ],
+  "dependencies": {
+      "express": ">=1.0.8",
+      "ejs": ">=0.4.2",
+      "redis": ">=0.10.0",
+      "mongoose":">=3.8.6"
+  },
+  "author": "",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
