@@ -9,7 +9,7 @@ npm install
 
 
 ## Developing
-sfchina@sfchina.com
+sfchina@sina.com
 
 
 ### Tools

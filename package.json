@@ -13,7 +13,7 @@
     "nodeclipse"
   ],
   "dependencies": {
-      "express": ">=1.0.8",
+      "express": ">=3.4.8",
       "ejs": ">=0.4.2",
       "redis": ">=0.10.0",
       "mongoose":">=3.8.6"
