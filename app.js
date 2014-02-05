@@ -8,7 +8,7 @@ var router=require('./router');
 var app=express();
 var conf=require('./conf');
 
-global.conf=conf;
+global.conf=conf.conf;
 
 app.set('port', process.env.PORT || 5050);
 

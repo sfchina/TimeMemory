@@ -1,9 +1,7 @@
+var serv=require('./serv');
 
-exports.serv=function(req,res){
-	var cmd=req.params.serv;
-	if(cmd=='cpimg'){
-		res.send('Hello World');
-	}else{
-		res.send('Hello World');
-	}
+exports.serv=function(req,res,next){
+	var cmd=req.params.serv; 
+	console.info(serv); 
+	serv.executes(req,res,next);
 };
