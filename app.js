@@ -8,6 +8,8 @@ var router=require('./router');
 var app=express();
 var conf=require('./conf');
 
+var timelapseLg=require('./lib/logic/timelapseLg');
+
 global.conf=conf.conf;
 
 app.set('port', process.env.PORT || 5050);
@@ -24,4 +26,5 @@ app.get('/serv/:serv?',router.serv);
 
 app.listen(app.get('port'),function(){
   console.log('Time Memory server listening on port '+app.get('port'));
+  timelapseLg.executes(global.conf.interval);
 });
