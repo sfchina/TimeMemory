@@ -18,7 +18,15 @@
 				$( this ).removeClass( "ui-state-hover" );
 			}
 		);
+		$(".ui-icon-refresh").click(function(){
+			refreshResult();
+		});
 		
+		$(".ui-icon-circle-triangle-e").click(function(){
+			captureImage();
+		});
+		
+		var widget = null;
 		var refreshResult=function(){
 			$.ajax({url:'/target/captured.json',dataType:'json'
 				,error:function(XMLHttpRequest, textStatus, errorThrown){
@@ -29,20 +37,63 @@
 		        	 var container=$('#container');
 		        	 var target='';
 		        	 var tempDayId;
+		        	 var count=0;
+		        	 
+		        	 var tempHeader;
+		        	 var tempContainer;
 		        	 $(result.datas).each(function(index,data){
 		        		 var values=data.split('-');
 		        		 var dayId=values.slice(0,3).join('-');
 		        		 var imgId=data.substr(0,data.length-4);
+		        		 
 		        		 if(dayId!=tempDayId){
 		        			 tempDayId=dayId;
-		        			 target=(target==''?target:'</div>¥n')+'<h3>'+dayId+'</h3><div>'
+		        			 tempContainer=$('#'+dayId);
+		        			 if(tempContainer.length==0){
+			        			 tempHeader=$('<h3">'+dayId+'</h3><div></div>');
+			        			 tempContainer=$('<div id="'+dayId+'"></div>');
+			        			 $("#timelapse").append(tempHeader).append(tempContainer); 
+			        			 count=0;
+		        			 }
 		        		 }
-		        		 target=target+'<img src="/target/'+data+'" class="captureimg" />'
+		        		 count+=1; 
+		        		 var imgObj=tempContainer.find('#'+imgId);
+		        		 if(imgObj.length==0){
+		        			 tempContainer.append($('<img src="/target/'+data+'" class="captureimg" id="'+imgId+'"/>'));
+			        		 if(count%4==0){
+			        			 tempContainer.append($('<br />'));
+			        		 }
+		        		 }
 		        	 });
-		        	 target=target+'</div>';
-		        	 container.html('<div id="timelapse">'+target+'</div>');
-		        	 $("#timelapse").accordion();
+		        	 if(!widget){
+		        		 widget=$("#timelapse").accordion();
+		        	 }else{
+		        		 $("#timelapse").accordion("refresh");
+		        	 }
+		        	 
 		         }
+		      	}
+				,complete:function(XMLHttpRequest, textStatus){
+					
+				}
+				});
+		};
+
+		var captureImage=function(){
+			$.ajax({url:'/serv/capture_image',dataType:'json'
+				,error:function(XMLHttpRequest, textStatus, errorThrown){
+					$("#realtimeCapture").html(errorThrown);
+					$("#realtimeCapture").dialog();
+				}
+				,success:function(result){
+					if(result.rc=="ok"){
+						var realImg='<img id="realtimeImg" style="width:100%;height:100px" src="data:image/png;base64,'
+								+result.data.img+'"/>';
+						$("#realtimeCapture").html(realImg);
+					}else{
+						$("#realtimeCapture").html(result.rm);
+					}
+					$( "#realtimeCapture" ).dialog();
 		      	}
 				,complete:function(XMLHttpRequest, textStatus){
 					
@@ -51,7 +102,7 @@
 		};
 		
 		refreshResult();
-		var inID=setInterval(refreshResult, 10*1000);
+		var inID=setInterval(refreshResult, 5*60*1000);//refresh images list per 5 minite
 		//clearInterval(inID);
 	});
 	</script>
@@ -80,14 +131,16 @@
 		position: absolute;
 	}
 	.captureimg{
-		width:80px;
-		height:60px;
+		width:240px;
+		height:180px;
 	}
 	</style>
 </head>
 <body>
 <ul id="icons" class="ui-widget ui-helper-clearfix">
 	<li class="ui-state-default ui-corner-all" title=".ui-icon-refresh"><span class="ui-icon ui-icon-refresh"></span></li>
+	<li class="ui-state-default ui-corner-all" title=".ui-icon-circle-triangle-e"><span class="ui-icon ui-icon-circle-triangle-e"></span></li>
+
 </ul>
 <div id="container">
 <div id="timelapse">
@@ -95,6 +148,8 @@
 </div>
 </div>
 
+<div id="realtimeCapture" title="RealTime Capture" style="width:400%;height:400px">
 
+</div>
 </body>
 </html>
