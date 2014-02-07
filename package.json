@@ -17,6 +17,7 @@
       "ejs": ">=0.4.2",
       "redis": ">=0.10.0",
       "mongoose":">=3.8.6"
+      ,"log4js":">=0.6.9"
   },
   "author": "",
   "license": "MIT",
